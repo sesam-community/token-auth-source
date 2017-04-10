@@ -23,7 +23,7 @@ def get_token(system_token):
 if __name__ == '__main__':
 
     format_string = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    logger = logging.getLogger('orchestrator-service')
+    logger = logging.getLogger('token-auth-service')
 
     # Log to stdout
     stdout_handler = logging.StreamHandler()
