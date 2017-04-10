@@ -4,6 +4,7 @@ A small microservice to get a token and place it into a SESAM instance every X s
 
 ##### Example configuration:
 
+
 ```
 {
   "_id": "token-auth-source",
