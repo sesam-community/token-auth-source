@@ -20,7 +20,7 @@ A small microservice to get a token and place it into a SESAM instance every X s
       # optional values below
       "update_interval": "86400",
     },
-    "image": "sesambuild/token-auth-source:latest"
+    "image": "sesamcommunity/token-auth-source:latest"
   }
 }
 ```
