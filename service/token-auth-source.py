@@ -8,8 +8,6 @@ from time import sleep
 logger = None
 update_interval = 84600
 
-use_header = bool(os.environ.get('use_header', "True"))
-
 ##getting token
 def create_header(system_token):
     headers = {
@@ -65,7 +63,7 @@ if __name__ == '__main__':
     while True:
         while True:
             try:
-                if bool(os.environ.get('use_header')):
+                if str(os.environ.get('use_header', "True")).lower() == "true":
                     token = create_header(os.environ.get("token_name"))
                 else:
                     token = create_payload(os.environ.get("token_name"))
