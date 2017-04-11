@@ -10,6 +10,7 @@ update_interval = 84600
 
 ##getting token
 def create_header(system_token):
+    logger.info("Creating header")
     headers = {
         "user":os.environ.get('user'),
         "password":os.environ.get('password'),
@@ -20,6 +21,7 @@ def create_header(system_token):
     return token
 
 def create_payload(system_token):
+    logger.info("Creating payload")
     data_payload = dict(item.split("=") for item in os.environ.get("data_payload").split(";"))
     resp = requests.post(url=os.environ.get('url'), data=data_payload).json()
     token = resp[system_token]
@@ -61,9 +63,10 @@ if __name__ == '__main__':
     api_connection = sesamclient.Connection(sesamapi_base_url=node_url + "api", timeout=60*10)
 
     while True:
+        token = None
         while True:
             try:
-                if str(os.environ.get('use_header', "True")).lower() == "true":
+                if os.environ.get('use_header').lower() == "true":
                     token = create_header(os.environ.get("token_name"))
                 else:
                     token = create_payload(os.environ.get("token_name"))
