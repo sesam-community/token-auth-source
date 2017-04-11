@@ -8,8 +8,10 @@ from time import sleep
 logger = None
 update_interval = 84600
 
+use_header = bool(os.environ.get('use_header', "True"))
+
 ##getting token
-def get_token(system_token):
+def create_header(system_token):
     headers = {
         "user":os.environ.get('user'),
         "password":os.environ.get('password'),
@@ -19,6 +21,11 @@ def get_token(system_token):
     token = resp[system_token]
     return token
 
+def create_payload(system_token):
+    data_payload = dict(item.split("=") for item in os.environ.get("data_payload").split(";"))
+    resp = requests.post(url=os.environ.get('url'), data=data_payload).json()
+    token = resp[system_token]
+    return token
 
 if __name__ == '__main__':
 
@@ -58,7 +65,10 @@ if __name__ == '__main__':
     while True:
         while True:
             try:
-                token = get_token(os.environ.get("token_name"))
+                if bool(os.environ.get('use_header')):
+                    token = create_header(os.environ.get("token_name"))
+                else:
+                    token = create_payload(os.environ.get("token_name"))
                 try:
                     env_vars = {}
                     env_vars[env_var_key] = token
