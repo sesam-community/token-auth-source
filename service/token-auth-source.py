@@ -66,7 +66,12 @@ if __name__ == '__main__':
         except:
             logger.warning("Update interval is not an integer! Falling back to default")
 
-    api_connection = sesamclient.Connection(sesamapi_base_url=node_url + "api", timeout=60*10)
+    if "sesam_token" in os.environ:
+        logger.info("Setting up connection to SESAM with jwt token")
+        api_connection = sesamclient.Connection(sesamapi_base_url=node_url + "api", timeout=60 * 10, jwt_auth_token=os.environ.get('sesam_token'))
+    else:
+        logger.info("Setting up connection to SESAM")
+        api_connection = sesamclient.Connection(sesamapi_base_url=node_url + "api", timeout=60*10)
 
     while True:
         token = None
