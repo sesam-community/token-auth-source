@@ -23,8 +23,14 @@ def create_header(system_token):
 def create_payload(system_token):
     logger.info("Creating payload")
     data_payload = dict(item.split("=") for item in os.environ.get("data_payload").split(";"))
-    resp = requests.post(url=os.environ.get('url'), data=data_payload).json()
-    token = resp[system_token]
+    resp = requests.post(url=os.environ.get('url'), data=data_payload)
+    if resp.status_code == 200:
+        token = resp.json()[system_token]
+    else:
+        logger.info("Got status code " + str(resp.status_code) )
+        logger.info(("Error message : " + str(resp.text) ))
+        sys.exit(1)
+
     return token
 
 if __name__ == '__main__':
