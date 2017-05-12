@@ -31,7 +31,8 @@ def create_payload(system_token):
         logger.info("Got status code " + str(resp.status_code) )
         logger.info(("Error message : " + str(resp.text) ))
         sys.exit(1)
-
+        
+    logger.info("Access token from " + os.environ.get('url') + " : " + token )
     return token
 
 if __name__ == '__main__':
@@ -86,7 +87,7 @@ if __name__ == '__main__':
                 try:
                     env_vars = {}
                     env_vars[env_var_key] = token
-                    api_connection.put_env_vars(env_vars)
+                    api_connection.post_env_vars(env_vars)
                 except BaseException as e:
                     logger.exception("Updating env vars in node failed!")
                 logger.info("Updated token in node, sleeping for %s seconds..." % update_interval)
