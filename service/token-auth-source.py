@@ -18,6 +18,7 @@ def create_header(system_token):
     }
     resp = requests.get(url=os.environ.get('url'), headers=headers).json()
     token = resp[system_token]
+    logger.info("Access token from " + os.environ.get('url') + " : " + token )
     return token
 
 def create_payload(system_token):
@@ -69,6 +70,7 @@ if __name__ == '__main__':
     if "sesam_token" in os.environ:
         logger.info("Setting up connection to SESAM with jwt token")
         api_connection = sesamclient.Connection(sesamapi_base_url=node_url + "api", timeout=60 * 10, jwt_auth_token=os.environ.get('sesam_token'))
+        logger.info("Sesam JWT : " + os.environ.get('sesam_token'))
     else:
         logger.info("Setting up connection to SESAM")
         api_connection = sesamclient.Connection(sesamapi_base_url=node_url + "api", timeout=60*10)
@@ -84,7 +86,7 @@ if __name__ == '__main__':
                 try:
                     env_vars = {}
                     env_vars[env_var_key] = token
-                    api_connection.post_env_vars(env_vars)
+                    api_connection.put_env_vars(env_vars)
                 except BaseException as e:
                     logger.exception("Updating env vars in node failed!")
                 logger.info("Updated token in node, sleeping for %s seconds..." % update_interval)
