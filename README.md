@@ -1,5 +1,5 @@
 # Token auth Source
-[![Build Status](https://travis-ci.org/sesam-community/sesam-token-auth-source.svg?branch=master)](https://travis-ci.org/sesam-community/sesam-token-auth-source)
+[![Build Status](https://travis-ci.org/sesam-community/token-auth-source.svg?branch=master)](https://travis-ci.org/sesam-community/token-auth-source)
 
 A small microservice to get a token and place it into a SESAM instance every X seconds.
 
