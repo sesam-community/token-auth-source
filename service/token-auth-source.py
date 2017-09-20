@@ -1,3 +1,4 @@
+import json
 import os
 import requests
 import sesamclient
@@ -23,7 +24,16 @@ def create_header(system_token):
 
 def create_payload(system_token):
     logger.info("Creating payload")
-    data_payload = dict(item.split("=") for item in os.environ.get("data_payload").split(";"))
+
+    payload = os.getenv("data_payload")
+    if not payload:
+        logger.error("No 'data_payload' variable defined")
+        sys.exit(1)
+
+    try:
+        data_payload = json.loads(payload)
+    except ValueError:
+        data_payload = dict(item.split("=") for item in os.environ.get("data_payload").split(";"))
     resp = requests.post(url=os.environ.get('url'), data=data_payload)
     if resp.status_code == 200:
         token = resp.json()[system_token]
