@@ -90,8 +90,9 @@ if __name__ == '__main__':
         token = None
         while True:
             try:
-                if os.environ.get('use_header').lower() == "true":
-                    token = create_header(os.environ.get("token_name"))
+                if os.getenv("use_header"):
+                    if os.getenv("use_header").lower() == "true":
+                        token = create_header(os.environ.get("token_name"))
                 else:
                     token = create_payload(os.environ.get("token_name"))
                 try:
