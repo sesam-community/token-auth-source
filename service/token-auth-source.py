@@ -118,7 +118,7 @@ def upload_secret(secret_key, value):
     try:
         secrets = dict()
         secrets[secret_key] = value
-        api_connection.put_secrets(secrets, dont_encrypt=True)
+        api_connection.put_secrets(secrets, dont_encrypt=False)
         logger.info("Successfully uploaded secret '{}' to node secret store".format(secret_key))
     except BaseException as e:
         logger.exception("Failed to upload '{}' to secret store".format(secret_key))
