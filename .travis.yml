@@ -10,5 +10,5 @@ services:
 
 script: true
 
-after_script:
+install:
   - bash <(curl -s https://raw.githubusercontent.com/sesam-community/guidelines/BaardBouvet-patch-1/after_success.sh)
