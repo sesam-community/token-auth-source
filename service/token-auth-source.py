@@ -20,15 +20,15 @@ def create_header(config):
     }
     resp = requests.get(config["auth_url"], headers=headers)
     if not resp.status_code == 200:
+        logger.error("Failed to create header. Server returned {}. Full response:\n{}".format(resp.status_code, resp.text))
         resp.raise_for_status()
-        sys.exit(1)
 
     token = resp.json().get(config["token_name"], None)
     if not token:
         logger.error("Auth response does not contain '{}' property. Unable to return access token"
                      .format(config["token_name"]))
 
-    logger.info("Access token from {}: {}".format(config["auth_url"], token))
+    logger.info("Successfully retrieved access token.")
     return token
 
 
@@ -44,14 +44,13 @@ def create_payload(config):
             payload = dict(item.split("=") for item in os.environ.get("data_payload").split(";"))
 
     resp = requests.post(config["auth_url"], data=payload)
-    resp.raise_for_status()
-    if resp.status_code == 200:
-        token = resp.json()[config["token_name"]]
-    else:
+    if resp.status_code != 200:
+        logger.error("Failed to create payload. Server returned {}. Full response:\n{}".format(resp.status_code, resp.text))
         resp.raise_for_status()
-        sys.exit(1)
-        
-    logger.info("Access token from {}: {}".format(config["auth_url"], token))
+
+    token = resp.json()[config["token_name"]]
+
+    logger.info("Successfully retrieved access token.")
     return token
 
 
@@ -165,6 +164,7 @@ if __name__ == '__main__':
             multi_config = json.loads(multi_config)
         except ValueError:
             logger.error("multi_config does not contain valid json.")
+            sys.exit(1)
 
         if not isinstance(multi_config, list):
             logger.error("multi_config must be an array")
@@ -172,11 +172,13 @@ if __name__ == '__main__':
 
         while True:
             for config in multi_config:
-
-                if "use_header" in config and config["use_header"].lower() == "true":
-                    update_token_with_header(config)
-                else:
-                    update_token_with_payload(config)
+                try:
+                    if "use_header" in config and config["use_header"].lower() == "true":
+                        update_token_with_header(config)
+                    else:
+                        update_token_with_payload(config)
+                except:
+                    logger.error("Failed to run config for secret '{}'. Will try again next time".format(config.get("secret_key")))
 
             logger.info("Updated tokens in node, sleeping for {} seconds...".format(update_interval))
             sleep(update_interval)
