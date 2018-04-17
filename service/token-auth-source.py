@@ -31,9 +31,12 @@ def create_payload(system_token):
         logger.info("Got status code " + str(resp.status_code) )
         logger.info(("Error message : " + str(resp.text) ))
         sys.exit(1)
-        
+
     logger.info("Access token from " + os.environ.get('url') + " : " + token )
     return token
+
+def str_to_bool(string_input):
+    return str(string_input).lower() == "true"
 
 if __name__ == '__main__':
 
@@ -70,7 +73,8 @@ if __name__ == '__main__':
 
     if "sesam_token" in os.environ:
         logger.info("Setting up connection to SESAM with jwt token")
-        api_connection = sesamclient.Connection(sesamapi_base_url=node_url + "api", timeout=60 * 10, jwt_auth_token=os.environ.get('sesam_token'))
+        api_connection = sesamclient.Connection(sesamapi_base_url=node_url + "api", timeout=60 * 10,
+                                                jwt_auth_token=os.environ.get('sesam_token'), verify_ssl=str_to_bool(os.environ.get('verify_ssl', "True")))
         logger.info("Sesam JWT : " + os.environ.get('sesam_token'))
     else:
         logger.info("Setting up connection to SESAM")
