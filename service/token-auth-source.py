@@ -91,9 +91,11 @@ if __name__ == '__main__':
                     env_vars = {}
                     env_vars[env_var_key] = token
                     if os.environ.get('add_to_secret', "true").lower() == "true":
+                        logger.info("Adding token to secret")
                         api_connection.put_secrets(env_vars, dont_encrypt=False)
                     else:
                         api_connection.post_env_vars(env_vars)
+                        logger.info("Adding token to environment variable")
                 except BaseException as e:
                     logger.exception("Updating env vars in node failed!")
                 logger.info("Updated token in node, sleeping for %s seconds..." % update_interval)
