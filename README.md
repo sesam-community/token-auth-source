@@ -23,6 +23,7 @@ A small microservice to get a token and place it into a SESAM instance every X s
       "sesam_token": "your_jwt_token"
       "use_header": "False",
       "verify_ssl": "False" (verfy ssl to node. Defaults to true),
+      "use_basic_auth": "True (Defaults to false)",
       "data_payload": "grant_type=password;client_id=vol;client_secret=someSecret12445;username=theUsername;password=thePassword",
       "update_interval": "86400"
     },
