@@ -24,7 +24,10 @@ def create_header(system_token):
 def create_payload(system_token):
     logger.info("Creating payload")
     data_payload = dict(item.split("=") for item in os.environ.get("data_payload").split(";"))
-    resp = requests.post(url=os.environ.get('url'), data=data_payload)
+    if os.environ.get("use_basic_auth", "false").lower() == "true":
+        resp = requests.post(url=os.environ.get('url'), data=data_payload, auth=(os.environ.get('user'), os.environ.get('password')))
+    else:
+        resp = requests.post(url=os.environ.get('url'), data=data_payload)
     if resp.status_code == 200:
         token = resp.json()[system_token]
     else:
