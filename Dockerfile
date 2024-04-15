@@ -1,5 +1,4 @@
-FROM ubuntu:18.04
-MAINTAINER Ashkan Vahidishams "ashkan.vahidishams@sesam.io"
+FROM ubuntu:20.04
 COPY ./service /service
 
 RUN apt-get update
